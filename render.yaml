@@ -1,0 +1,41 @@
+services:
+  # ─── Unified Full-Stack Service ───────────────────────────────────────────────
+  # Express backend serves API at /api/* AND React frontend at /*
+  # Single domain: https://justiceai-rgpg.onrender.com
+  - type: web
+    name: justiceai-backend
+    runtime: node
+    rootDir: server
+    buildCommand: npm --prefix ../client install && npm --prefix ../client run build && npm install --include=dev && node build.mjs
+    startCommand: node prestart.mjs && node dist/index.js
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: JWT_REFRESH_SECRET
+        sync: false
+      - key: JWT_REFRESH_EXPIRES_IN
+        value: 30d
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.8-flash
+      - key: GEMINI_FALLBACK_MODEL
+        value: gemini-flash-lite-latest
+      - key: GEMINI_CREDENTIALS_B64
+        sync: false
+      - key: CLIENT_URL
+        value: https://justiceai-rgpg.onrender.com
+      - key: UPLOAD_DIR
+        value: ./uploads
+      - key: NODE_VERSION
+        value: 20.18.0
